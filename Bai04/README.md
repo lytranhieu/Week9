@@ -1,19 +1,19 @@
 # Bài 4 – Kiểm thử đa hệ điều hành với Matrix Strategy
 
-## 1. Mục tiêu
+## Mục tiêu
 
 Từ dự án BankSystem đã hoàn thành ở Bài 3, sử dụng GitHub Actions Matrix Strategy để chạy cùng một bộ kiểm thử trên **Ubuntu, Windows và macOS**. Cố tình tạo lỗi đường dẫn phụ thuộc Windows, quan sát kết quả khác nhau theo hệ điều hành, sau đó sửa bằng API `java.nio.file.Path` và xác nhận cả ba môi trường đều chạy thành công.
 
 > **Lưu ý về bài nộp:** Giữ nguyên JavaDoc không dấu trong mã Java. README này có dấu. Không thay đổi nghiệp vụ ngân hàng.
 
-## 2. Cấu trúc
+## Cấu trúc
 
 - `Bai04/pom.xml`: Maven/JUnit/Checkstyle/Logback kế thừa Bài 3.
 - `Bai04/src/main/java/com/practice/banksystem/ReportPathResolver.java`: mã xác định đường dẫn tệp.
 - `Bai04/src/test/java/com/practice/banksystem/ReportPathResolverTest.java`: kiểm thử sử dụng `@TempDir` và một tệp thật.
 - `.github/workflows/bai04-matrix.yml`: workflow ở **gốc repository**, không nằm bên trong Bai04.
 
-## 3. Cấu hình Matrix
+## Cấu hình Matrix
 
 ```yaml
 strategy:
@@ -29,7 +29,7 @@ runs-on: ${{ matrix.os }}
 - `working-directory: Bai04`: vì dự án Maven nằm trong thư mục `Bai04` của repository Week9.
 - `mvn clean verify`: chạy qua các phase cần thiết, bao gồm kiểm thử và đóng gói.
 
-## 4. Giai đoạn 1 – Cố tình gây lỗi
+## Giai đoạn 1 – Cố tình gây lỗi
 
 **Bản lỗi (file Java của ZIP `Bai04_Matrix_Stage1_FAIL.zip`)** sử dụng:
 
@@ -65,7 +65,7 @@ git push -u origin test/bai04-matrix
 
 Khi làm xong, mở Pull Request từ `test/bai04-matrix` vào `main` (không merge khi còn lỗi). Workflow cũng được kích hoạt bởi `pull_request`.
 
-## 5. Giai đoạn 2 – Refactor để chạy đa nền tảng
+## Giai đoạn 2 – Refactor để chạy đa nền tảng
 
 **Bản sửa (file Java của ZIP `Bai04_Matrix_Stage2_FIXED.zip`)** dùng:
 
@@ -88,7 +88,7 @@ git push origin test/bai04-matrix
 3. Mở GitHub Actions; cả ba runner phải báo **PASS** và không có test thất bại. Lưu ảnh và log.
 4. Kiểm tra PR cũng đã chạy lại trên ba OS. Có thể đóng PR sau khi lưu minh chứng; không bắt buộc merge PR thử nghiệm.
 
-## 6. Kết quả cần nộp và nhận xét
+## Kết quả cần nộp và nhận xét
 
 Minh chứng nên có:
 
@@ -100,6 +100,6 @@ Minh chứng nên có:
 
 **Giải thích:** Cách viết `"data\\report.txt"` gắn chặt với cách phân tách đường dẫn trên Windows, nên không di động. `Path.of("data", "report.txt")` để Java tạo đường dẫn theo hệ điều hành, nhờ vậy tránh sự khác biệt khi chạy trên Windows và các hệ Unix.
 
-## 7. Trạng thái xác minh
+## Trạng thái xác minh
 
 Các ví dụ được chuẩn bị bằng cách kế thừa mã nguồn Bài 3; đây là kỳ vọng kết quả cần kiểm chứng trong GitHub Actions, không phải kết quả CI thực tế đã được chạy. `BUILD SUCCESS` chỉ được kết luận sau khi xem log từ từng runner.
