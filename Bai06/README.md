@@ -1,10 +1,10 @@
 # Bài 6 – Tối ưu CI/CD bằng Maven Dependency Caching
 
-## 1. Mục tiêu
+## Mục tiêu
 
 Áp dụng cơ chế `cache: 'maven'` trong GitHub Actions để tái sử dụng các thư viện đã được tải về, hạn chế tải lặp lại từ Maven Central. Dự án sử dụng lại mã nguồn BankSystem với Maven, JUnit 5, Checkstyle và JaCoCo (ngưỡng Line Coverage >= 80%) của Bài 5.
 
-## 2. Cấu hình
+## Cấu hình
 
 Workflow đặt tại **gốc repository**: `.github/workflows/bai06-cache.yml`.
 
@@ -24,7 +24,7 @@ Workflow đặt tại **gốc repository**: `.github/workflows/bai06-cache.yml`.
 - `cache-jdk: false`: tắt cache JDK, giúp việc so sánh tập trung hơn vào Maven dependencies.
 - `mvn clean verify`: kiểm tra biên dịch, Checkstyle, Unit Test và JaCoCo như các bài trước.
 
-## 3. Cách chạy và ghi minh chứng
+## Cách chạy và ghi minh chứng
 
 **Lần push thứ nhất (cache lạnh / miss):** Push `Bai06/` và file workflow lên một nhánh Git. Trong Actions, mở bước **Set up JDK 17 and Maven cache** để xem trạng thái cache (có thể xuất hiện `Cache not found for input keys`). Chờ workflow thành công để cache có cơ hội được lưu. Ghi lại `Total duration` và thời gian step Maven.
 
@@ -34,18 +34,18 @@ Workflow đặt tại **gốc repository**: `.github/workflows/bai06-cache.yml`.
 
 **Chứng minh bằng logs:** Trong bước `Set up JDK 17 and Maven cache`, lưu ảnh trạng thái cache MISS và HIT. Trong bước `Maven clean verify`, quan sát việc tải dependencies có giảm đi; cache HIT không bảo đảm hoàn toàn không có kết nối mạng hoặc thời gian chạy chắc chắn ngắn hơn mọi lần.
 
-## 4. Kết quả thực tế (điền sau khi chạy)
+## Kết quả thực tế (điền sau khi chạy)
 
 | Lần chạy | Trạng thái cache | Tổng thời gian | Thời gian bước Maven | Kết quả |
 |---|---|---|---|---|
 | Push 1 | MISS / chưa có cache | ... giây | ... giây | ... |
 | Push 2 | HIT / khôi phục cache | ... giây | ... giây | ... |
 
-## 5. Giải thích giải pháp
+## Giải thích giải pháp
 
 GitHub Actions sử dụng máy chạy tạm thời. Nếu không có dependency caching, Maven có thể phải tải lại nhiều thư viện giữa các workflow runs. `actions/setup-java` hỗ trợ khôi phục và lưu Maven Local Repository dưới dạng cache; khóa cache phụ thuộc vào hệ điều hành và nội dung tệp POM. Sau khi cache được lưu thành công, các lần chạy phù hợp có thể tái sử dụng dependencies. Điều này có thể rút ngắn thời gian tải thư viện và giảm truy cập Maven Central. Để chứng minh hiệu quả, đối chiếu logs MISS/HIT và thời gian thực thi trong hai lần chạy trên GitHub Actions.
 
-## 6. File nộp
+## File nộp
 
 - Thư mục `Bai06/` chứa mã nguồn, `pom.xml`, README.
 - File `.github/workflows/bai06-cache.yml` đặt ở gốc repository.
