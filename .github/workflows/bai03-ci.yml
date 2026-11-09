@@ -1,0 +1,33 @@
+name: Bai 03 - BankSystem Java CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Bai03
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v7
+
+      - name: Setup JDK 17 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Maven test and package
+        run: mvn --batch-mode --no-transfer-progress clean package
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: bank-system-jar
+          path: Bai03/target/bank-system-1.0-SNAPSHOT.jar
+          if-no-files-found: error
