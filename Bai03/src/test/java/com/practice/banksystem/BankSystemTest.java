@@ -14,7 +14,7 @@ class BankSystemTest {
     CheckingAccount account = new CheckingAccount(100L, 1000.0);
     account.deposit(250.0);
     account.withdraw(100.0);
-    assertEquals(1151.0, account.getBalance(), 1e-9);
+    assertEquals(1150.0, account.getBalance(), 1e-9);
     assertEquals(2, account.getTransactionList().size());
     assertTrue(account.getTransactionHistory().contains("Nạp tiền vãng lai"));
   }
