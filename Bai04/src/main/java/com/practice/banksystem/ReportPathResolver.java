@@ -14,6 +14,6 @@ public final class ReportPathResolver {
    * @return Duong dan tep bao cao giao dich.
    */
   public static Path transactionReport(Path root) {
-    return root.resolve("data\\report.txt");
+    return root.resolve(Path.of("data", "report.txt"));
   }
 }
