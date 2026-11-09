@@ -1,6 +1,14 @@
 name: Bai 03 - BankSystem Java CI
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'Bai03/**'
+      - '.github/workflows/bai03-ci.yml'
+  pull_request:
+    paths:
+      - 'Bai03/**'
+      - '.github/workflows/bai03-ci.yml'
 
 permissions:
   contents: read
