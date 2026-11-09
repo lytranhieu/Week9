@@ -45,7 +45,7 @@ Thực hiện trên **nhánh thực hành** riêng, KHÔNG sửa `main` đang ho
 **Mẫu giải thích lỗi:** Test kỳ vọng sai (`1151.0`) so với hành vi đúng của chương trình (`1150.0`). Maven Surefire phát hiện assertion thất bại và dừng lifecycle trước `package`. Sửa kết quả mong đợi về `1150.0` giúp test chạy thành công và tạo lại JAR. Việc cố tình gây lỗi nhằm kiểm tra khả năng quan sát và xử lý lỗi CI, không phải sửa nghiệp vụ ngân hàng.
 
 ## Minh chứng
-https://github.com/lytranhieu/Week9
+https://github.com/lytranhieu/Week9/actions/workflows/bai03-ci.yml
 
 ## Kết luận
 GitHub Actions giúp kiểm tra Build và Test tự động trên Runner Ubuntu, không chỉ phụ thuộc môi trường máy local. Artifact JAR được lưu để tải xuống xác minh. Khi có lỗi Unit Test, log giúp xác định nguyên nhân và sửa trước khi merge.
