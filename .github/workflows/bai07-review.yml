@@ -1,0 +1,50 @@
+name: Bai 07 - Automated PR Code Review
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions: {}
+
+jobs:
+  checkstyle-review:
+    name: bai07-inline-checkstyle
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Post inline Checkstyle comments
+        uses: dbelyaev/action-checkstyle@v3
+        with:
+          github_token: ${{ github.token }}
+          workdir: Bai07
+          checkstyle_config: google_checks.xml
+          reporter: github-pr-review
+          filter_mode: added
+          level: error
+          fail_level: error
+
+  quality-gate:
+    name: bai07-maven-verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 17 with Maven cache
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: Bai07/pom.xml
+
+      - name: Run Checkstyle, JUnit and JaCoCo
+        run: mvn --batch-mode --no-transfer-progress -f Bai07/pom.xml clean verify
