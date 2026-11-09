@@ -1,0 +1,38 @@
+name: Bai 06 - Maven Dependency Cache
+
+on:
+  push:
+    paths:
+      - 'Bai06/**'
+      - '.github/workflows/bai06-cache.yml'
+  pull_request:
+    paths:
+      - 'Bai06/**'
+      - '.github/workflows/bai06-cache.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build with Maven cache
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Bai06
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17 and Maven cache
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: 'maven'
+          cache-dependency-path: 'Bai06/pom.xml'
+          cache-jdk: false
+
+      - name: Maven clean verify
+        run: mvn --batch-mode --no-transfer-progress clean verify
